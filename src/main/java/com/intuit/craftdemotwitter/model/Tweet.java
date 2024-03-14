@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,7 +16,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tweet")
-@Data
+@Setter
+@Getter
 public class Tweet implements Comparable<Tweet> {
     private static final long serialVersionUID = 1L;
 
@@ -22,9 +25,9 @@ public class Tweet implements Comparable<Tweet> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tweetId;
 
-   @NotNull
-   @Size(max = 280)
-    @Column(name = "tweet_content", length = 140, nullable = false)
+    @NotNull
+    @Size(max = 280)
+    @Column(name = "tweet_content", length = 280, nullable = false)
     private String tweetContent;
 
     @CreationTimestamp

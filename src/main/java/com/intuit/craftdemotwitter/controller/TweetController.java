@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/tweets")
 @Slf4j
@@ -23,15 +25,15 @@ public class TweetController {
     }
 
     @GetMapping("/getTweetByUser/{userId}")
-    public ResponseEntity<TweetResponse> getTweetByUser(@PathVariable("userId") Long userId) {
-        TweetResponse tweetResponse = tweetService.getTweetByUser(userId);
-        return new ResponseEntity<>(tweetResponse, HttpStatus.OK);
+    public ResponseEntity<List<TweetResponse>> getTweetByUser(@PathVariable("userId") Long userId) {
+        List<TweetResponse> tweetResponses = tweetService.getTweetByUser(userId);
+        return new ResponseEntity<>(tweetResponses,HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<TweetResponse> addTweet(@RequestBody TweetResponse tweetResponse) {
         TweetResponse tweetR = tweetService.addTweet(tweetResponse);
-        return new ResponseEntity<>(tweetR, HttpStatus.OK);
+        return new ResponseEntity<>(tweetR, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{tweetId}")

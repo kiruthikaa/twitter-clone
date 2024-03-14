@@ -10,6 +10,8 @@ import com.intuit.craftdemotwitter.service.UserService;
 
 import java.util.List;
 
+import static org.springframework.http.ResponseEntity.status;
+
 @RestController
 @RequestMapping("/users")
 @Slf4j
@@ -40,20 +42,27 @@ public class UserController {
 
     @PatchMapping
     public UserResponse updateUser(@RequestBody UserResponse userResponse) {
+
         return userService.update(userResponse);
     }
 
     @PutMapping("/follow/{userId}")
     public ResponseEntity<HttpStatus> addFollower(@PathVariable Long userId,@RequestBody UserResponse userResponse) {
-        userService.addFollower(userResponse.getUserId(),userId);
+        boolean addFollower = userService.addFollower(userResponse.getUserId(),userId,false);
+        if(addFollower)
         return new ResponseEntity<>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @DeleteMapping("/unfollow/{userId}")
     public ResponseEntity<HttpStatus> removeFollower(
             @PathVariable("userId") Long userId,@RequestBody UserResponse userResponse) {
-        userService.removeFollower(userResponse.getUserId(),userId);
+        boolean removeFollower = userService.removeFollower(userResponse.getUserId(),userId);
+        if(removeFollower)
         return new ResponseEntity<>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     @GetMapping("/followers/{userId}")

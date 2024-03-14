@@ -52,15 +52,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean addFollower(Long followerId, Long userId) {
+    public boolean addFollower(Long followerId, Long userId,boolean isSelf) {
         User followee = userRepository.findById(userId).orElse(null);
         User follower = userRepository.findById(followerId).orElse(null);
-        if(Objects.nonNull(followee) && Objects.nonNull(follower)){
-            followee.setFollower(followerId);
-            follower.setFollowing(userId);
-            userRepository.save(follower);
-            userRepository.save(followee);
-            return true;
+
+        if(Objects.nonNull(followee) && Objects.nonNull(follower))
+        {
+            if(isSelf || follower.getUserId() != followee.getUserId())
+            {
+                followee.setFollower(followerId);
+                follower.setFollowing(userId);
+                userRepository.save(follower);
+                userRepository.save(followee);
+                return true;
+            }
         }
         return false;
     }
@@ -70,12 +75,16 @@ public class UserServiceImpl implements UserService {
     public boolean removeFollower(Long followerId, Long userId) {
         User followee = userRepository.findById(userId).orElse(null);
         User follower = userRepository.findById(followerId).orElse(null);
-        if(Objects.nonNull(followee) && Objects.nonNull(follower)){
-            followee.removeFollower(followerId);
-            follower.removeFollowing(userId);
-            userRepository.save(follower);
-            userRepository.save(followee);
-            return true;
+        if(Objects.nonNull(followee) && Objects.nonNull(follower))
+        {
+            if(follower.getUserId() != followee.getUserId())
+            {
+                followee.removeFollower(followerId);
+                follower.removeFollowing(userId);
+                userRepository.save(follower);
+                userRepository.save(followee);
+                return true;
+            }
         }
         return false;
     }
@@ -84,13 +93,20 @@ public class UserServiceImpl implements UserService {
     public List<UserResponse> getFollowers(Long userId) {
         List<UserResponse> followers = new ArrayList<>();
         User user = userRepository.getById(userId);
-        List<User> users = userRepository.findAllById(user.getFollower().stream()
-                .collect(Collectors.toList()));
-        Optional.ofNullable(users)
-                .ifPresent(
-                        usersList ->
-                                usersList.forEach(eachUser -> followers.add(userMapper.transform(eachUser))));
-        return followers;
+        if(Objects.nonNull(user))
+        {
+            List<User> users = userRepository.findAllById(user.getFollower().stream()
+                    .collect(Collectors.toList()));
+            if(users.size()>0)
+            {
+                Optional.ofNullable(users)
+                    .ifPresent(
+                            usersList ->
+                                    usersList.forEach(eachUser -> followers.add(userMapper.transform(eachUser))));
+                return followers;
+            }
+        }
+        return null;
     }
 
     @Override

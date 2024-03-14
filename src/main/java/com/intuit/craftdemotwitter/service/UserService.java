@@ -14,7 +14,7 @@ public interface UserService {
 
     public UserResponse update(UserResponse userResponse);
 
-    public boolean addFollower(Long followerId, Long userId);
+    public boolean addFollower(Long followerId, Long userId,boolean isSelf);
 
     public boolean removeFollower(Long followerId, Long userId);
 

@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(classes = CraftDemoTwitterApplication.class)
 class CraftDemoTwitterApplicationTests {
 
 	@Test

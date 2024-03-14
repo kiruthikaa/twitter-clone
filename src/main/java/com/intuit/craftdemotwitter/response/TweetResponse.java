@@ -2,10 +2,13 @@ package com.intuit.craftdemotwitter.response;
 
 import com.intuit.craftdemotwitter.model.User;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.ZonedDateTime;
 
-@Data
+@Getter
+@Setter
 public class TweetResponse {
     private Long tweetId;
 
@@ -13,5 +16,5 @@ public class TweetResponse {
 
     private ZonedDateTime createdAt;
 
-    private User createdBy;
+    private UserResponse createdBy;
 }

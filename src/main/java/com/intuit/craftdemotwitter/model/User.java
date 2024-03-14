@@ -3,6 +3,8 @@ package com.intuit.craftdemotwitter.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,7 +15,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user")
-@Data
+@Setter
+@Getter
 public class User {
     private static final long serialVersionUID = 1L;
 
@@ -36,8 +39,8 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private ZonedDateTime updatedAt;
 
-    @OneToMany(mappedBy = "createdBy")
-    private Set<Tweet> tweets = new HashSet<>();
+    /*@OneToMany(mappedBy = "createdBy")
+    private Set<Tweet> tweets = new HashSet<>();*/
 
     @ElementCollection
     private Set<Long> following = new HashSet<>();
@@ -45,7 +48,7 @@ public class User {
     @ElementCollection
     private Set<Long> follower = new HashSet<>();
 
-    public User addTweet(Tweet tweet) {
+    /*public User addTweet(Tweet tweet) {
         this.tweets.add(tweet);
         tweet.setCreatedBy(this);
         return this;
@@ -55,7 +58,7 @@ public class User {
         this.tweets.remove(tweet);
         tweet.setCreatedBy(null);
         return this;
-    }
+    }*/
 
     public void setFollower(Long userId) {
         follower.add(userId);
