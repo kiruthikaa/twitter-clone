@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public  UserResponse getUserByUserId(Long userId) {
-        User user =  userRepository.findById(userId).orElse(new User());
+        User user =  userRepository.findById(userId).orElse(null);
         return userMapper.transform(user);
     }
 
